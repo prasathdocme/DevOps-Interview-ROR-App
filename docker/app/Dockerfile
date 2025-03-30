@@ -14,6 +14,6 @@ RUN bundle exec rails assets:precompile
 ADD docker/app/entrypoint.sh /usr/bin/
 
 RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/usr/bin/entrypoint.sh"]
 EXPOSE 3000
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
