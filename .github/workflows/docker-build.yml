@@ -19,23 +19,22 @@ jobs:
     - name: Set up AWS CLI
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_KEY }}
-        aws-secret-access-key: ${{ secrets.AWS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-south-1
 
     - name: Log in to AWS ECR
       run: |
-        # Log in to ECR using the AWS CLI and Docker
-        echo $(aws ecr get-login-password --region ap-south-1) | docker login --username AWS --password-stdin 573770898769.dkr.ecr.ap-south-1.amazonaws.com
+        aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 573770898769.dkr.ecr.ap-south-1.amazonaws.com
 
     - name: Build and push Rails image to ECR
       run: |
-        docker build -t rails_app .
-        docker tag rails_app_git:git 573770898769.dkr.ecr.ap-south-1.amazonaws.com/rails_app_git:git
-        docker push 573770898769.dkr.ecr.ap-south-1.amazonaws.com/rails_app_git:git
+        docker build -t my-rails-app .
+        docker tag my-rails-app:latest 573770898769.dkr.ecr.ap-south-1.amazonaws.com/rails_app:latest
+        docker push 573770898769.dkr.ecr.ap-south-1.amazonaws.com/rails_app:latest
 
     - name: Build and push Webserver image to ECR
       run: |
-        docker build -t webserver_git .
-        docker tag webserver_git:git 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver_git:git
-        docker push 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver_git:git
+        docker build -t my-webserver .
+        docker tag my-webserver:latest 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver:latest
+        docker push 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver:latest
