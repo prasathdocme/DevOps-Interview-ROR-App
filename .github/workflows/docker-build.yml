@@ -35,7 +35,7 @@ jobs:
 
     - name: Build and push Webserver image to ECR
       run: |
-        docker build -t my-webserver ./docker/nginx/Dockerfile .
+        docker buildx build -t my-webserver -f ./docker/nginx/Dockerfile .
         docker tag my-webserver:latest 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver:latest
         docker push 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver:latest
 
