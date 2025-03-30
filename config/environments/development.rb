@@ -61,6 +61,8 @@ Rails.application.configure do
 
   config.hosts <<  "#{ENV['LB_ENDPOINT']}"
 
+config.hosts << "localhost"
+  config.hosts << "rails_app"
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
