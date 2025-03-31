@@ -30,12 +30,12 @@ jobs:
     - name: Build and push Rails image to ECR
       run: |
         docker build -t my-rails-app -f docker/app/Dockerfile .
-        docker tag my-rails-app:latest 573770898769.dkr.ecr.ap-south-1.amazonaws.com/rails_app:latest
-        docker push 573770898769.dkr.ecr.ap-south-1.amazonaws.com/rails_app:latest
+        docker tag my-rails-app:latest 573770898769.dkr.ecr.ap-south-1.amazonaws.com/rails_app:git
+        docker push 573770898769.dkr.ecr.ap-south-1.amazonaws.com/rails_app:git
 
     - name: Build and push Webserver image to ECR
       run: |
         docker buildx build --load -t my-webserver -f ./docker/nginx/Dockerfile .
-        docker tag my-webserver:latest 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver:latest
-        docker push 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver:latest
+        docker tag my-webserver:latest 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver:git
+        docker push 573770898769.dkr.ecr.ap-south-1.amazonaws.com/webserver:git
 
