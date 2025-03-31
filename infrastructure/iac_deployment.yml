@@ -3,7 +3,7 @@ Description: Deploy Rails + Nginx on ECS with RDS & S3
 
 Resources:
 
-  ### VPC & Networking ###
+  #VPC
   MyVPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -52,7 +52,7 @@ Resources:
       VpcId: !Ref MyVPC
       InternetGatewayId: !Ref InternetGateway
 
-  ### Security Groups ###
+  #Security Groups
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -86,13 +86,13 @@ Resources:
           ToPort: 5432
           SourceSecurityGroupId: !Ref ECSSecurityGroup
 
-  ### S3 Bucket ###
+  #S3 Bucket
   MyS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub "rails-app-bucknew${AWS::AccountId}"
 
-  ### IAM Role for ECS Execution ###
+  #IAM Role ECS
   ECSIAMRole:
     Type: AWS::IAM::Role
     Properties:
@@ -109,11 +109,11 @@ Resources:
         - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
 
-  ### ECS Cluster ###
+  #ECS Cluster
   MyECSCluster:
     Type: AWS::ECS::Cluster
 
-  ### RDS Database (PostgreSQL) ###
+  #RDS Database
   MyRDSInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -137,7 +137,7 @@ Resources:
         - !Ref PrivateSubnet1
         - !Ref PrivateSubnet2
 
-  ### ECS Task Definition ###
+  #ECS TD
   MyTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -170,7 +170,7 @@ Resources:
           PortMappings:
             - ContainerPort: 80
 
-  ### ECS Service ###
+  #ECS Service
   MyECSService:
     Type: AWS::ECS::Service
     Properties:
@@ -191,7 +191,7 @@ Resources:
           ContainerPort: 80
           TargetGroupArn: !Ref MyTargetGroup
 
-  ### Application Load Balancer ###
+  #Application Load Balancer
   MyALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
