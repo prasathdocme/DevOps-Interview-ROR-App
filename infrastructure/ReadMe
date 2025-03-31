@@ -1,0 +1,99 @@
+AWS ECS Deployment Documentation
+1. Overview
+This document describes the deployment process of a Ruby on Rails application with Nginx using AWS ECS (Fargate), RDS (PostgreSQL), and S3. The deployment is automated using GitHub Actions for CI/CD, and AWS CloudFormation is used for infrastructure provisioning.
+
+2. Architecture Diagram
+
+
+
+3. Deployment Steps
+3.1 GitHub Actions for CI/CD
+A GitHub Actions workflow is set up to trigger on a push to the repository.
+
+
+The workflow builds Docker images of the Rails and webserver application.
+
+
+The built images are then pushed to AWS Elastic Container Registry (ECR).
+
+
+The ECS service is updated to use the new images.
+
+
+3.2 CloudFormation Stack Creation
+A CloudFormation stack is created using YAML template.
+
+
+This stack provisions:
+
+
+A VPC with public and private subnets.
+
+
+Security groups for ALB, ECS, and RDS.
+
+
+An Application Load Balancer (ALB).
+
+
+An ECS Cluster with Fargate.
+
+
+An RDS PostgreSQL instance.
+
+
+An S3 bucket for storage.
+
+
+An ECS Task Definition and Service.
+
+
+Upload the YAML file to CloudFormation and create the stack, the ECS service runs the Rails and Nginx containers.
+
+
+4. Networking Configuration
+4.1 ECS to ECR Connectivity Issue
+Initially, ECS was unable to pull images from ECR due to the lack of internet access.
+
+
+The solution was to enable a NAT Gateway for a public subnet.
+
+
+This allowed the ECS tasks (in a private subnet) to communicate with ECR and pull the required images.
+
+
+4.2 Security Groups & Routing
+ALB allows public HTTP access on port 80.
+
+
+ECS tasks allow only internal communication from the ALB.
+
+
+RDS is only accessible from ECS (not publicly exposed).
+
+
+NAT Gateway enables outbound internet access for ECS.
+
+
+5. Issues Faced & Solutions
+Issue
+Solution
+ECS task unable to pull from ECR
+Enabled NAT Gateway for the private subnet
+RDS not accessible from ECS
+Ensured correct security groups and subnet configuration
+ALB not resolving requests
+Verified target group and health check settings
+
+
+6. Application Access
+The application is accessible through the ALB DNS Name:
+
+
+Can find this value in the CloudFormation Outputs section under LoadBalancerDNS.
+
+
+
+
+7. Conclusion
+The deployment is automated, scalable, and secure. The ECS service is running behind an ALB, with a PostgreSQL RDS database and S3 integration.
